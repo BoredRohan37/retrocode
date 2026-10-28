@@ -1,0 +1,11 @@
+{
+  "name": "retrocode",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {},
+    "ghcr.io/devcontainers/features/rust:1": {},
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "customizations": { "vscode": { "extensions": ["rust-lang.rust-analyzer", "golang.go"] } }
+}

@@ -1,0 +1,19 @@
+{
+  "protocol": "retrocode/1",
+  "version": "0.1.0",
+  "framing": "4-byte LE length prefix + UTF-8 JSON payload; bit31 of length word = zstd-compressed payload",
+  "conventions": {"request_ids": "odd=client, even=server", "positions": "UTF-8 byte offsets", "event_seq": "monotonic per session"},
+  "messages": [
+    {"m": "session/hello", "dir": "C>S", "params": {"proto": "0.1.0", "client": "0.1.0", "token": "shared-secret", "workspace": "name", "resume": "session-id|null"}, "result": {"session": "a1", "root": "/abs/path", "agent_running": false, "caps": {"langs": ["rust","go"], "models": [], "resume": true}}},
+    {"m": "session/ping", "dir": "both", "params": {"t": 0}, "result": {"t": 0, "rtt_ms": 0}},
+    {"m": "error", "dir": "S>C", "params": {"ref_id": 0, "code": "rev_mismatch|io|auth|not_implemented|internal", "message": "human readable"}},
+    {"m": "fs/tree", "dir": "C>S", "params": {"path": "src/"}, "result": {"entries": [{"name": "main.rs", "kind": "file|dir", "size": 0, "mtime": 0}]}},
+    {"m": "fs/watch", "dir": "C>S", "params": {"path": "src/", "on": true}},
+    {"m": "fs/event", "dir": "S>C", "params": {"events": [{"kind": "create|delete|modify|rename", "path": "src/x.rs", "old_path": null}]}},
+    {"m": "doc/open", "dir": "C>S", "params": {"path": "src/main.rs"}, "result": {"rev": 1, "lang": "rust", "size": 0, "readonly": false, "content": "...", "compressed": false}},
+    {"m": "doc/op", "dir": "C>S", "params": {"path": "src/main.rs", "base_rev": 1, "ops": [{"ins": "text", "at": 0}, {"del": 3, "at": 5}]}},
+    {"m": "doc/patch", "dir": "S>C", "params": {"path": "src/main.rs", "rev": 2, "origin": "user|agent|fs", "ops": [{"ins": "text", "at": 0}]}},
+    {"m": "doc/save", "dir": "C>S", "params": {"path": "src/main.rs"}, "result": {"rev": 2, "mtime": 0}},
+    {"m": "doc/close", "dir": "C>S", "params": {"path": "src/main.rs"}}
+  ]
+}
